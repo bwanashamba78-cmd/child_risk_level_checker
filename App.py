@@ -4,7 +4,8 @@ import joblib
 
 # Load model and encoder
 model = joblib.load("childrisklevel.pkl")
-encoder = joblib.load("risk_encoder.pkl")
+decode_map = {0: "Low", 1: "Medium", 2: "High"}
+
 
 # Language selection
 language = st.selectbox("Select Language / Chagua Lugha", ["English", "Swahili"])
@@ -95,7 +96,7 @@ if st.button(t("predict_button")):
         probabilities = model.predict_proba(user_input)[0]
 
         # Decode prediction
-        risk_level = encoder.inverse_transform([prediction])[0]
+        risk_level = decode_map.get(int(prediction), "Unknown")
 
         # Extract probabilities
         low_risk = probabilities[0] * 100
